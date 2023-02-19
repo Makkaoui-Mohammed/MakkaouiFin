@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MakkaouiFin.Data;
 using MakkaouiFin.Models;
+using MakkaouiFin.Data;
 
 namespace MakkaouiFin.Controllers
 {
@@ -25,6 +26,7 @@ namespace MakkaouiFin.Controllers
               return View(await _context.Movie.ToListAsync());
         }
 
+        // GET: Movies/Details/5
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
