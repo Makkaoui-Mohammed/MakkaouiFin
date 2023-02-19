@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MakkaouiFin.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<MakkaouiFinContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MakkaouiFinContext") ?? throw new InvalidOperationException("Connection string 'MakkaouiFinContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
