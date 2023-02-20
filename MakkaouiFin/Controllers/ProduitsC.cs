@@ -2,95 +2,100 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MakkaouiFin.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MakkaouiFin.Data;
 using MakkaouiFin.Models;
-using MakkaouiFin.Data;
 
 namespace MakkaouiFin.Controllers
 {
-    public class MoviesController : Controller
+    public class ProduitsC : Controller
     {
         private readonly MakkaouiFinContext _context;
 
-        public MoviesController(MakkaouiFinContext context)
+        public ProduitsC(MakkaouiFinContext context)
         {
             _context = context;
         }
 
-        // GET: Movies
+        // GET: Produits
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Movie.ToListAsync());
+            return View(await _context.Produit.ToListAsync());
         }
+        public void AddItemToShoppingCart(int id)
+        {
+            //return _context.Produit.Any(e => e.ProduitID == id);
 
-        // GET: Movies/Details/5
-        // GET: Movies/Details/5
+            _context.LignePanier.Add(new LignePanier { Quantite = 100, PanierID = 1, ProduitID = id });
+            _context.SaveChanges();
+        }
+        // GET: Produits/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null || _context.Produit == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            var produit = await _context.Produit
+                .FirstOrDefaultAsync(m => m.ProduitID == id);
+            if (produit == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(produit);
         }
 
-        // GET: Movies/Create
+        // GET: Produits/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Movies/Create
+        // POST: Produits/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price")] Movie movie)
+        public async Task<IActionResult> Create([Bind("ProduitID,Nom,Price")] Produit produit)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
+                _context.Add(produit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(produit);
         }
 
-        // GET: Movies/Edit/5
+        // GET: Produits/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null || _context.Produit == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie == null)
+            var produit = await _context.Produit.FindAsync(id);
+            if (produit == null)
             {
                 return NotFound();
             }
-            return View(movie);
+            return View(produit);
         }
 
-        // POST: Movies/Edit/5
+        // POST: Produits/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("ProduitID,Nom,Price")] Produit produit)
         {
-            if (id != movie.Id)
+            if (id != produit.ProduitID)
             {
                 return NotFound();
             }
@@ -99,12 +104,12 @@ namespace MakkaouiFin.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
+                    _context.Update(produit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!ProduitExists(produit.ProduitID))
                     {
                         return NotFound();
                     }
@@ -115,49 +120,49 @@ namespace MakkaouiFin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(produit);
         }
 
-        // GET: Movies/Delete/5
+        // GET: Produits/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null || _context.Produit == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            var produit = await _context.Produit
+                .FirstOrDefaultAsync(m => m.ProduitID == id);
+            if (produit == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(produit);
         }
 
-        // POST: Movies/Delete/5
+        // POST: Produits/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Movie == null)
+            if (_context.Produit == null)
             {
-                return Problem("Entity set 'MakkaouiFinContext.Movie'  is null.");
+                return Problem("Entity set 'MakkaouiFinContext.Produit'  is null.");
             }
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie != null)
+            var produit = await _context.Produit.FindAsync(id);
+            if (produit != null)
             {
-                _context.Movie.Remove(movie);
+                _context.Produit.Remove(produit);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(int id)
+        private bool ProduitExists(int id)
         {
-          return _context.Movie.Any(e => e.Id == id);
+            return _context.Produit.Any(e => e.ProduitID == id);
         }
     }
 }

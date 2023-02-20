@@ -9,11 +9,15 @@ namespace MakkaouiFin.Data
 {
     public class MakkaouiFinContext : DbContext
     {
-        public MakkaouiFinContext (DbContextOptions<MakkaouiFinContext> options)
+        public MakkaouiFinContext(DbContextOptions<MakkaouiFinContext> options)
             : base(options)
         {
         }
 
-        public DbSet<MakkaouiFin.Models.Movie> Movie { get; set; } = default!;
+        public DbSet<MakkaouiFin.Models.Panier> Panier { get; set; } = default!;
+
+        public DbSet<MakkaouiFin.Models.Produit> Produit { get; set; }
+
+        public DbSet<MakkaouiFin.Models.LignePanier> LignePanier { get; set; }
     }
 }

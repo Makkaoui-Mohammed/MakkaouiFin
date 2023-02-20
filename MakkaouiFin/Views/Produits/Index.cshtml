@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MakkaouiFin.Models.Produit>
+
+@{
+    ViewData["Title"] = "List of produits";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-xs-6 border-primary mb-3">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-header text-white bg-info">
+                            <p class="card-text">
+                                <h5 class="card-title ">
+                                    @item.Nom
+                                </h5>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text"><b>Prix: </b>@item.Price</p>
+                            <p class="card-text ">
+                                <b>Status: AVAILABLE </b>
+                                @if (DateTime.Now == DateTime.Now)
+                                {
+                                    <span class="badge bg-success text-white">AVAILABLE</span>
+                                }
+
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer ">
+                            <p class="card-text">
+                                <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.ProduitID">
+                                    <i class="bi bi-eye-fill"></i> Show Details
+                                </a>
+                                <a class="btn btn-success text-white @((DateTime.Now > DateTime.Now) ? "disabled" : "")"
+                               asp-controller="Produits"
+                               asp-action="AddItemToShoppingCart"
+                               asp-route-id="@item.ProduitID">
+                                    <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price)
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
